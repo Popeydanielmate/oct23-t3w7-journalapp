@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import { useLocalStorage } from 'react-use';
 
 function App() {
+
+  let [journalEntries, setJournalEntries] = useState([]);
+  let [storedEntries, setStoredEntries] = useLocalStorage("journalEntries");
+
+  useEffect(() => {
+    setJournalEntries(storedEntries);
+
+    return (() => {
+      setStoredEntries(journalEntries);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {journalEntries.length > 0 && <p>{JSON.stringify(journalEntries)}</p>}
     </div>
   );
 }
